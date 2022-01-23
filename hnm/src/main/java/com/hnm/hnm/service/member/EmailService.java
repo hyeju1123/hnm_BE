@@ -76,8 +76,6 @@ public class EmailService {
         EmailToken notCertifiedEmail = emailTokenRepository.findByValue(requestDto.getEmailToken())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 이메일 토큰입니다."));
 
-        System.out.println("notCertifiedEmail = " + notCertifiedEmail);
-
         // 토큰으로 얻은 이메일이 요청 들어온 이메일과 동일한지 확인
         if (!notCertifiedEmail.getKey().equals(requestDto.getEmail()))
             throw new IllegalArgumentException("이메일 토큰이 일치하지 않습니다.");

@@ -40,12 +40,10 @@ public class EmailController {
                 .build();
         try {
             // 해당 이메일 토큰이 저장되어 있었다면 삭제
-            System.out.println("requestDto EmailToken: " + requestDto.getEmailToken());
             emailService.certifiedEmailCheck(requestDto);
             response.sendRedirect("http://" + host + ":8080/auth/mail/success");
         } catch (IllegalArgumentException ex) {
             // 해당 이메일 토큰이 만료되거나 존재하지 않으면 재생성
-            System.out.println("====================email failed==================");
             EmailToken updatedEmailToken = emailService.updateEmailToken(requestDto);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/mail/failed");
             request.setAttribute("eToken", updatedEmailToken.getValue());

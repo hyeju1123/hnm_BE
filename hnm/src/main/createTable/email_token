@@ -1,0 +1,5 @@
+CREATE TABLE email_token (
+    email_token_id VARCHAR(100), # email
+    value VARCHAR(500),
+    PRIMARY KEY (email_token_id)
+);

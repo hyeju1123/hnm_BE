@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -22,13 +21,8 @@ public class RefreshToken {
     // refresh token 이 들어감
     private String value;
 
-    private LocalDateTime createDate = LocalDateTime.now();
-
-    private LocalDateTime updateDate = LocalDateTime.now();
-
     public RefreshToken updateValue(String token) {
         this.value = token;
-        this.updateDate = LocalDateTime.now();
         return this;
     }
 

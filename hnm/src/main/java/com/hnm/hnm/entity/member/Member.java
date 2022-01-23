@@ -22,9 +22,7 @@ public class Member {
 
     private String password;
 
-//    private String emailToken;
-//
-//    private String refreshToken;
+    private String profile;
 
     private String snsType;
 
@@ -41,6 +39,4 @@ public class Member {
         this.snsType = snsType;
         this.authority = authority;
     }
-
-
 }

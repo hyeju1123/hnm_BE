@@ -1,0 +1,12 @@
+CREATE TABLE member (
+    member_id INT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(300) NOT NULL,
+    password VARCHAR(500) NULL,
+    nickname VARCHAR(30) NULL,
+    profile VARCHAR(500) NULL,
+    sns_type VARCHAR(20) NULL,
+    create_date DATETIME,
+    authority VARCHAR(20) NOT NULL,
+    PRIMARY KEY (member_id),
+    UNIQUE KEY (email)
+);

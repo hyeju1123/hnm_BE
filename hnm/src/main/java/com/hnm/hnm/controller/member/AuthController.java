@@ -7,10 +7,7 @@ import com.hnm.hnm.entity.token.TokenDto;
 import com.hnm.hnm.service.member.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -32,21 +29,5 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
-    }
-
-    @GetMapping("/mail/success")
-    public String getEmailAuthSuccess() {
-        return "successEmailAuth";
-    }
-
-    @GetMapping("/mail/failed")
-    public String getEmailAuthFailed(HttpServletRequest request, Model model) {
-        String newEmailToken = (String) request.getAttribute("eToken");
-        String email = (String) request.getAttribute("email");
-
-        model.addAttribute("email", email);
-        model.addAttribute("emailToken", newEmailToken);
-
-        return "failedEmailAuth";
     }
 }

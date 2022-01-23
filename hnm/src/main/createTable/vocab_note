@@ -1,0 +1,8 @@
+CREATE TABLE vocab_note (
+    vocab_note_id INT NOT NULL AUTO_INCREMENT,
+    note_id INT NOT NULL,
+    vocab_id INT NOT NULL,
+    PRIMARY KEY (vocab_note_id),
+    FOREIGN KEY (note_id) REFERENCES note (note_id),
+    FOREIGN KEY (vocab_id) REFERENCES vocab (vocab_id)
+);
