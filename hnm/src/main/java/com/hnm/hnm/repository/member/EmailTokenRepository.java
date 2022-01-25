@@ -9,7 +9,9 @@ import java.util.Optional;
 @Repository
 public interface EmailTokenRepository extends JpaRepository<EmailToken, Long> {
 
+    Optional<EmailToken> findByKeyAndValue(String key, String value);
+
     Optional<EmailToken> findByKey(String key);
 
-    Optional<EmailToken> findByValue(String value);
+    boolean existsByKey(String key);
 }

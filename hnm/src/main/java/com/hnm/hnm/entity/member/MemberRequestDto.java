@@ -15,18 +15,18 @@ public class MemberRequestDto {
 
     private String oauth;
 
-    public Member toEntity() {
+    private Member toEntity(String encodedPassword) {
         return Member.builder()
                 .email(email)
-                .password(password)
+                .password(encodedPassword)
                 .snsType(oauth)
                 .authority(Authority.FREE_USER)
                 .build();
     }
 
     public Member toMember(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(password);
-        return toEntity();
+        String encodedPassword = passwordEncoder.encode(password);
+        return toEntity(encodedPassword);
     }
 
     public UsernamePasswordAuthenticationToken toAuthentication() {

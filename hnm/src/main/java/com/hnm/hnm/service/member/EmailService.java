@@ -1,7 +1,7 @@
 package com.hnm.hnm.service.member;
 
 import com.hnm.hnm.entity.token.EmailToken;
-import com.hnm.hnm.entity.token.EmailTokenRequestDto;
+import com.hnm.hnm.exception.email.NotFoundEmailTokenException;
 import com.hnm.hnm.jwtSecurity.TokenProvider;
 import com.hnm.hnm.repository.member.EmailTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +23,17 @@ public class EmailService {
     private final EmailTokenRepository emailTokenRepository;
     @Value("${mailHost}") String host;
 
-    public void sendEmail(EmailTokenRequestDto requestDto) throws MessagingException {
-        String emailContents = getEmailContents(requestDto.getEmail(), requestDto.getEmailToken());
+    public void sendEmail(String email) throws MessagingException {
+
+        EmailToken emailToken = emailTokenRepository.findByKey(email)
+                .orElseThrow(NotFoundEmailTokenException::new);
+
+        String emailContents = getEmailContents(emailToken.getKey(), emailToken.getValue());
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
         helper.setFrom("hongAndMan");
-        helper.setTo(requestDto.getEmail());
+        helper.setTo(emailToken.getKey());
         helper.setSubject("[홍만중국어 이메일 인증]");
         helper.setText(emailContents, true);
 
@@ -70,24 +74,19 @@ public class EmailService {
     }
 
     @Transactional
-    public void certifiedEmailCheck(EmailTokenRequestDto requestDto) {
+    public void certifiedEmailCheck(String email, String emailToken) {
         // 해당 토큰이 저장되어 있는지 확인
-        System.out.println("emailtoken: " + requestDto.getEmailToken());
-        EmailToken notCertifiedEmail = emailTokenRepository.findByValue(requestDto.getEmailToken())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 이메일 토큰입니다."));
-
-        // 토큰으로 얻은 이메일이 요청 들어온 이메일과 동일한지 확인
-        if (!notCertifiedEmail.getKey().equals(requestDto.getEmail()))
-            throw new IllegalArgumentException("이메일 토큰이 일치하지 않습니다.");
+        EmailToken notCertifiedEmail = emailTokenRepository.findByKeyAndValue(email, emailToken)
+                .orElseThrow(NotFoundEmailTokenException::new);
 
         emailTokenRepository.delete(notCertifiedEmail);
     }
 
     @Transactional
-    public EmailToken updateEmailToken(EmailTokenRequestDto requestDto) {
-        String newEmailToken = tokenProvider.generateEmailToken(requestDto.getEmail());
+    public EmailToken updateEmailToken(String email) {
+        String newEmailToken = tokenProvider.generateEmailToken(email);
         EmailToken emailToken = EmailToken.builder()
-                .key(requestDto.getEmail())
+                .key(email)
                 .value(newEmailToken)
                 .build();
 
