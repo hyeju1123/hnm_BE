@@ -5,5 +5,7 @@ CREATE TABLE vocab (
     intonation VARCHAR(100) NOT NULL,
     class VARCHAR(100) NOT NULL,
     explanation VARCHAR(2000) NULL DEFAULT '',
-    PRIMARY KEY (vocab_id)
+    note_id INT NOT NULL,
+    PRIMARY KEY (vocab_id),
+    FOREIGN KEY (note_id) REFERENCES note (note_id)
 );

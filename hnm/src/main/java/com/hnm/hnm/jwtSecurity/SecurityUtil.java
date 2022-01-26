@@ -1,5 +1,7 @@
 package com.hnm.hnm.jwtSecurity;
 
+import com.hnm.hnm.entity.member.Member;
+import com.hnm.hnm.entity.member.MemberResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
